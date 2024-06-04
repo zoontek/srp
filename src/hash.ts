@@ -7,9 +7,12 @@ export const hash = async (
   hashAlgorithm: HashAlgorithm,
   ...input: (SRPInt | string)[]
 ) => {
-  const buffers = input.map((item) =>
-    typeof item === "string" ? encodeUtf8(item) : hexToBuffer(item.toHex()),
-  );
+  const buffers = input.map((item) => {
+    if (typeof item === "string") {
+      return encodeUtf8(item);
+    }
+    return hexToBuffer(item.toHex());
+  });
 
   const combined = new Uint8Array(
     buffers.reduce((offset, item) => offset + item.byteLength, 0),
